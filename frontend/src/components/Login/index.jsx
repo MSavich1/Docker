@@ -1,26 +1,20 @@
 import { useState } from "react";
 import axios from "axios";
 import { Form, Field, ErrorMessage } from "formik";
-import TextError from "../Forms/TextError/TextError";
+import style from "./Login.module.css";
+import TextError from "../Forms/TextError/index";
 import { useMicroform } from "../../utils/microFormik";
 import { createValidationSchema } from "../../utils/createValidationSchema";
-
-const form = {
-  display: "flex",
-  flexDirection: "column",
-  width: "300px",
-  margin: "0 auto",
-};
-const field = { padding: "10px 0px", margin: "10px 0" };
+import { API_SIGN_IN, REQUIRED, NOTREQUIRED, TOKEN } from "../../constants";
 
 export const Login = ({ setAuth }) => {
-  const { MicroformContext, Microform, microformsControl } = useMicroform();
+  const { MicroformContext, Microform } = useMicroform();
   const [errorAuth, setErrorAuth] = useState(false);
   const [validName, setValidName] = useState(true);
 
   const authRequest = async (email, password) => {
     try {
-      const { data } = await axios.post("api/sign-in", {
+      const { data } = await axios.post(API_SIGN_IN, {
         email: email,
         password: password,
       });
@@ -37,10 +31,12 @@ export const Login = ({ setAuth }) => {
 
   const onSubmit = async (values) => {
     try {
-      const token = await authRequest(values.email, values.password);
+      const { email, password } = values;
+
+      const token = await authRequest(email, password);
 
       if (token) {
-        localStorage.setItem("token", token);
+        localStorage.setItem(TOKEN, token);
         setAuth(true);
       }
     } catch (err) {
@@ -49,7 +45,7 @@ export const Login = ({ setAuth }) => {
   };
 
   const validateName = (value) => {
-    if (value === "required") {
+    if (value === REQUIRED) {
       setValidName(true);
     } else {
       setValidName(false);
@@ -66,7 +62,7 @@ export const Login = ({ setAuth }) => {
           name="login"
           options={{
             initialValues: {
-              theme: "required",
+              theme: REQUIRED,
               name: "",
               email: "",
               password: "",
@@ -78,14 +74,14 @@ export const Login = ({ setAuth }) => {
         >
           {(formikProps) => {
             return (
-              <Form style={form}>
+              <Form className={style.form}>
                 <Field as="select" name="theme">
-                  <option value="required">Required name</option>
-                  <option value="notRequired">Not required name</option>
+                  <option value={REQUIRED}>Required name</option>
+                  <option value={NOTREQUIRED}>Not required name</option>
                 </Field>
                 <div>
                   <Field
-                    style={field}
+                    className={style.field}
                     type="text"
                     name="name"
                     placeholder="Name"
@@ -95,7 +91,7 @@ export const Login = ({ setAuth }) => {
                 </div>
                 <div>
                   <Field
-                    style={field}
+                    className={style.field}
                     type="email"
                     name="email"
                     placeholder="Email"
@@ -106,7 +102,7 @@ export const Login = ({ setAuth }) => {
                 </div>
                 <div>
                   <Field
-                    style={field}
+                    className={style.field}
                     type="password"
                     name="password"
                     placeholder="Password"
@@ -116,7 +112,7 @@ export const Login = ({ setAuth }) => {
 
                 <div>
                   <Field
-                    style={field}
+                    className={style.field}
                     type="password"
                     name="confirmPassword"
                     placeholder="confirmPassword"

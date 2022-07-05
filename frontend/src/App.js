@@ -1,12 +1,13 @@
 import "./App.css";
 import { useState } from "react";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
-import { Forms } from "./components/Forms/Forms";
-import { Login } from "./components/Login/Login";
+import { Forms } from "./components/Forms/index";
+import { Login } from "./components/Login/index";
+import { TOKEN } from "./constants";
 
 function App() {
-  const token = Boolean(localStorage.getItem("token"));
-  const [_, setAuth] = useState(token)
+  const token = Boolean(localStorage.getItem(TOKEN));
+  const [, setAuth] = useState(token)
 
   const component = token ? <Forms setAuth={setAuth}/> : <Login setAuth={setAuth} />
   return (

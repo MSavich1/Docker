@@ -1,7 +1,9 @@
+import { REQUIRED } from "../constants";
+
 export const validateComments = (value) => {
     let error;
     if (!value) {
-      error = "Required";
+      error = REQUIRED;
     }
     return error;
   };

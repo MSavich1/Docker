@@ -19,7 +19,7 @@ input[type='email'],
 input[type='password'],
 textarea {
   display: block;
-  width: 400px;
+  width: 300px;
   padding: 6px 12px;
   font-size: 14px;
   line-height: 1.42857143;

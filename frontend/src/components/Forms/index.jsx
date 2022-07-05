@@ -1,27 +1,33 @@
-import { Channel } from "./Channel/Channel";
-import { Social } from "./Social/Social";
-import { PhoneNumber } from "./PhoneNumber/PhoneNumber";
-import { useMicroform } from "../../utils/microFormik";
 import { useState } from "react";
+import style from "./Forms.module.css"
+import { Channel } from "./Channel/index";
+import { Social } from "./Social/index";
+import { PhoneNumber } from "./PhoneNumber/index";
+import { useMicroform } from "../../utils/microFormik";
+import { TOKEN } from "../../constants";
+
 
 export const Forms = ({ setAuth }) => {
   const { MicroformContext, Microform, microformsControl } = useMicroform();
   const [check, setCheck] = useState(false);
-  const [valid, setValid] = useState(null)
+  const [valid, setValid] = useState(null);
 
   const onClickCheck = async () => {
     const valid = await microformsControl.validateForms();
-    const validInput = await microformsControl.microforms.channel.validateForm();
+    const validInput =
+      await microformsControl.microforms.channel.validateForm();
+
     if (!valid) {
       setCheck(true);
     }
-    setValid(validInput)
-  };
-  const onClickLogOut = () => {
-    localStorage.removeItem("token");
-    setAuth(false);
+    setValid(validInput);
   };
   
+  const onClickLogOut = () => {
+    localStorage.removeItem(TOKEN);
+    setAuth(false);
+  };
+
   return (
     <>
       {!check ? (
@@ -33,11 +39,16 @@ export const Forms = ({ setAuth }) => {
             <Social microform={Microform} />
           </MicroformContext>
           <button onClick={onClickCheck}>check</button>
-          {valid && Object.entries(valid).map(el => <div style={{padding:"5px"}}>{[el[0]]}: {[el[1]]}</div>)}
+          {valid &&
+            Object.entries(valid).map((el) => (
+              <div className={style.requiredField}>
+                {[el[0]]}: {[el[1]]}
+              </div>
+            ))}
         </>
-        
-      ) 
-      : <div>Misson complete</div>}
+      ) : (
+        <div>Misson complete</div>
+      )}
     </>
   );
 };

@@ -68,6 +68,8 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
     depends_on:
       - frontend
+      - api
+      - auth
     networks:
       - realworld-docker-network
 
